@@ -1,4 +1,5 @@
 #include "HHDMI.h"
+#include "HVTC.h"
 #include "HINTC.h"
 #include "HIIC.h"
 #include "xil_printf.h"
@@ -23,6 +24,11 @@ int main()
 	}
 
 	Status = HHDMI_Init(&HdmiInst, &IicBusInstHdmi, HDMI_MAIN_ADDR);
+	if (Status != XST_SUCCESS) {
+		return Status;
+	}
+
+	Status = HVTC_Init();
 	if (Status != XST_SUCCESS) {
 		return Status;
 	}

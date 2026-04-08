@@ -10,11 +10,13 @@
 #define HVTC_H
 
 #include "xparameters.h"
+#include <stdbool.h>
+
 
 #define VTC_ADDR (XPAR_V_TC_0_BASEADDR)
 
 /************************** Function Declarations *****************************/
 int HVTC_Init();
-
+int HVTC_EnableController(bool Enable);
 
 #endif

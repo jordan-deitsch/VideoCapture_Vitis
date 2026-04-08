@@ -1,8 +1,9 @@
 #include "HHDMI.h"
-#include "HVTC.h"
 #include "HINTC.h"
 #include "HIIC.h"
+#include "HVTC.h"
 #include "xil_printf.h"
+#include <stdbool.h>
 
 int main()
 {
@@ -23,12 +24,12 @@ int main()
 		return Status;
 	}
 
-	Status = HHDMI_Init(&HdmiInst, &IicBusInstHdmi, HDMI_MAIN_ADDR);
+	Status = HVTC_Init();
 	if (Status != XST_SUCCESS) {
 		return Status;
 	}
 
-	Status = HVTC_Init();
+	Status = HHDMI_Init(&HdmiInst, &IicBusInstHdmi, HDMI_MAIN_ADDR);
 	if (Status != XST_SUCCESS) {
 		return Status;
 	}
@@ -45,7 +46,11 @@ int main()
 
 		if((HdmiInst.DisplayPresent == true) && (VideoActive == false))
 		{
-			
+			HVTC_EnableController(true);
+		}
+		else if(HdmiInst.DisplayPresent == false)
+		{
+			HVTC_EnableController(false);
 		}
 	}
     

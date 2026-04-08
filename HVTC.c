@@ -29,9 +29,10 @@
 #define VTC_GEN_FRAME_SYNC_REG      (0x100)
 #define VTC_GEN_GLOBAL_DELAY_REG    (0x140)
 
-
-
-#define VTC_CTRL_REG_DEFAULT    (0x07F7EF20)    // 0000_0111_1111_0111_1110_1111_0010_0000
+#define VTC_CTRL_REG_DEFAULT        (0x07F7EF20)    // 0000_0111_1111_0111_1110_1111_0010_0000
+#define VTC_TRL_REG_GEN_ENABLE_MASK (0x4)
+#define VTC_TRL_REG_UPDATE_MASK     (0x2)
+#define VTC_TRL_REG_SW_ENABLE_MASK  (0x1)
 
 /************************** Device Instance Definitions *****************************/
 
@@ -45,28 +46,43 @@ static u32 HVTC_GetReg(u32 BaseAddress, u32 Offset);
 
 
 int HVTC_Init()
-{
-    u32 RegValue = 0;
-    
+{    
     HVTC_SetReg(VTC_ADDR, VTC_CTRL_REG, VTC_CTRL_REG_DEFAULT);
 
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_STATUS_REG);
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_ERROR_REG);
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_IRQ_ENABLE_REG);
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_ACTIVE_SIZE_F0_REG);
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_TIMING_STATUS_REG);
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_ENCODING_REG);
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_POLARITY_REG);
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_HSIZE_REG);
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_VSIZE_REG);
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_HSYNC_REG);
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_F0_VBLANK_H_REG);
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_F0_VSYNC_V_REG);
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_F0_VSYNC_H_REG);
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_ACTIVE_SIZE_F1_REG);
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_FRAME_SYNC_REG);
-    RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_GLOBAL_DELAY_REG);
+    // u32 RegValue = 0;
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_STATUS_REG);
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_ERROR_REG);
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_IRQ_ENABLE_REG);
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_ACTIVE_SIZE_F0_REG);
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_TIMING_STATUS_REG);
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_ENCODING_REG);
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_POLARITY_REG);
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_HSIZE_REG);
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_VSIZE_REG);
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_HSYNC_REG);
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_F0_VBLANK_H_REG);
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_F0_VSYNC_V_REG);
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_F0_VSYNC_H_REG);
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_ACTIVE_SIZE_F1_REG);
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_FRAME_SYNC_REG);
+    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_GLOBAL_DELAY_REG);
     
+    return XST_SUCCESS;
+}
+
+int HVTC_EnableController(bool Enable)
+{
+    u32 RegValue = HVTC_GetReg(VTC_ADDR, VTC_CTRL_REG);
+    u32 MaskValue = VTC_TRL_REG_GEN_ENABLE_MASK | VTC_TRL_REG_SW_ENABLE_MASK;
+    
+    if(Enable){
+        RegValue = RegValue | MaskValue;
+    }
+    else{
+        RegValue = RegValue & (~MaskValue);
+    }
+
+    HVTC_SetReg(VTC_ADDR, VTC_CTRL_REG, RegValue);
     return XST_SUCCESS;
 }
 

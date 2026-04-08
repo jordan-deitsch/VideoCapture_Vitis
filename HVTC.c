@@ -8,8 +8,8 @@
 
 #include "HVTC.h"
 #include "xil_printf.h"
-#include <xstatus.h>
 #include "xil_io.h"
+#include <xstatus.h>
 
 #define VTC_CTRL_REG                (0x00)
 #define VTC_STATUS_REG              (0x04)
@@ -29,10 +29,10 @@
 #define VTC_GEN_FRAME_SYNC_REG      (0x100)
 #define VTC_GEN_GLOBAL_DELAY_REG    (0x140)
 
-#define VTC_CTRL_REG_DEFAULT        (0x07F7EF20)    // 0000_0111_1111_0111_1110_1111_0010_0000
-#define VTC_TRL_REG_GEN_ENABLE_MASK (0x4)
-#define VTC_TRL_REG_UPDATE_MASK     (0x2)
-#define VTC_TRL_REG_SW_ENABLE_MASK  (0x1)
+#define VTC_CTRL_REG_DEFAULT            (0x07F7EF20)    // 0000_0111_1111_0111_1110_1111_0010_0000
+#define VTC_CTRL_REG_GEN_ENABLE_MASK    (0x4)
+#define VTC_CTRL_REG_UPDATE_MASK        (0x2)
+#define VTC_CTRL_REG_SW_ENABLE_MASK     (0x1)
 
 /************************** Device Instance Definitions *****************************/
 
@@ -73,7 +73,7 @@ int HVTC_Init()
 int HVTC_EnableController(bool Enable)
 {
     u32 RegValue = HVTC_GetReg(VTC_ADDR, VTC_CTRL_REG);
-    u32 MaskValue = VTC_TRL_REG_GEN_ENABLE_MASK | VTC_TRL_REG_SW_ENABLE_MASK;
+    u32 MaskValue = VTC_CTRL_REG_GEN_ENABLE_MASK | VTC_CTRL_REG_SW_ENABLE_MASK;
     
     if(Enable){
         RegValue = RegValue | MaskValue;

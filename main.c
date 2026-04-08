@@ -42,15 +42,15 @@ int main()
 		if(HDMI_INTERRUPT_VECTOR != 0)
 		{
 			HHDMI_ConnectionEvent(&HdmiInst);
-		}
 
-		if((HdmiInst.DisplayPresent == true) && (VideoActive == false))
-		{
-			HVTC_EnableController(true);
-		}
-		else if(HdmiInst.DisplayPresent == false)
-		{
-			HVTC_EnableController(false);
+			if((HdmiInst.DisplayPresent == true) && (VideoActive == false))
+			{
+				HVTC_EnableController(true);
+			}
+			else if(HdmiInst.DisplayPresent == false)
+			{
+				HVTC_EnableController(false);
+			}
 		}
 	}
     

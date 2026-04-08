@@ -10,10 +10,20 @@
 #define HVTC_H
 
 #include "xparameters.h"
+#include "xil_types.h"
 #include <stdbool.h>
 
 
 #define VTC_ADDR (XPAR_V_TC_0_BASEADDR)
+
+typedef struct TimingController
+{
+	u16 ActiveVsize;
+    u16 ActiveHsize;
+} TimingController;
+
+/************************** Peripheral Device Declarations *****************************/
+
 
 /************************** Function Declarations *****************************/
 int HVTC_Init();

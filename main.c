@@ -36,11 +36,6 @@ int main()
 		{
 			HHDMI_ConnectionEvent(&HdmiInst);
 		}
-
-		if((HdmiInst.DisplayPresent == true) && (VideoActive == false))
-		{
-			
-		}
 	}
     
   return 0;

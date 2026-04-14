@@ -14,7 +14,7 @@
 #include <stdbool.h>
 
 
-#define VTC_ADDR (XPAR_V_TC_0_BASEADDR)
+#define VTC_BASE_ADDR (XPAR_V_TC_0_BASEADDR)
 
 typedef struct TimingController
 {
@@ -23,10 +23,12 @@ typedef struct TimingController
 } TimingController;
 
 /************************** Peripheral Device Declarations *****************************/
-
+extern TimingController TimingControllerInst;
 
 /************************** Function Declarations *****************************/
-int HVTC_Init();
-int HVTC_EnableController(bool Enable);
+int HVTC_Init(TimingController *TimeCtrlInstPtr);
+int HVTC_EnableController(TimingController *TimeCtrlInstPtr, bool Enable);
+int HVTC_GetTimingSettings(TimingController *TimeCtrlInstPtr);
+int HVTC_UpdateRegisters(TimingController *TimeCtrlInstPtr);
 
 #endif

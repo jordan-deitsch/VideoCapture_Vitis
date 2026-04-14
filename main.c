@@ -2,6 +2,7 @@
 #include "HINTC.h"
 #include "HIIC.h"
 #include "HVTC.h"
+#include "HVTPG.h"
 #include "xil_printf.h"
 #include <stdbool.h>
 
@@ -24,7 +25,12 @@ int main()
 		return Status;
 	}
 
-	Status = HVTC_Init();
+	Status = HVTC_Init(&TimingControllerInst);
+	if (Status != XST_SUCCESS) {
+		return Status;
+	}
+
+	Status = HVTPG_Init(&PatternGenInst);
 	if (Status != XST_SUCCESS) {
 		return Status;
 	}
@@ -35,22 +41,32 @@ int main()
 	}
 	
 	xil_printf("Finished initializing\r\n");
+
+	bool GenVideo = false;
 	
-	bool VideoActive = false;
 	while(1)
 	{
 		if(HDMI_INTERRUPT_VECTOR != 0)
 		{
 			HHDMI_ConnectionEvent(&HdmiInst);
 
-			if((HdmiInst.DisplayPresent == true) && (VideoActive == false))
+			if(HdmiInst.DisplayPresent)
 			{
-				HVTC_EnableController(true);
+				HVTC_UpdateRegisters(&TimingControllerInst);
+				HVTC_EnableController(&TimingControllerInst, true);
+				HVTPG_ConfigureFrame(&PatternGenInst, e_HorizontalRamp);
+				GenVideo = true;
 			}
-			else if(HdmiInst.DisplayPresent == false)
+			else
 			{
-				HVTC_EnableController(false);
+				HVTC_EnableController(&TimingControllerInst, false);
+				GenVideo = false;
 			}
+		}
+
+		if(GenVideo)
+		{
+			HVTPG_GenerateFrame(&PatternGenInst);
 		}
 	}
     

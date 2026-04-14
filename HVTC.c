@@ -35,44 +35,55 @@
 #define VTC_CTRL_REG_SW_ENABLE_MASK     (0x1)
 
 /************************** Device Instance Definitions *****************************/
+TimingController TimingControllerInst;
 
 
 /************************** Variable Definitions *****************************/
 
 
 /************************** Internal Definitions *****************************/
-static void HVTC_SetReg(u32 BaseAddress, u32 Offset, u32 Value);
-static u32 HVTC_GetReg(u32 BaseAddress, u32 Offset);
+static void HVTC_SetReg(u32 Offset, u32 Value);
+static u32 HVTC_GetReg(u32 Offset);
 
 
-int HVTC_Init()
+int HVTC_Init(TimingController *TimeCtrlInstPtr)
 {    
-    HVTC_SetReg(VTC_ADDR, VTC_CTRL_REG, VTC_CTRL_REG_DEFAULT);
+    if(NULL == TimeCtrlInstPtr) {
+        return XST_FAILURE;
+    }
+    
+    HVTC_SetReg(VTC_CTRL_REG, VTC_CTRL_REG_DEFAULT);
 
     // u32 RegValue = 0;
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_STATUS_REG);
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_ERROR_REG);
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_IRQ_ENABLE_REG);
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_ACTIVE_SIZE_F0_REG);
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_TIMING_STATUS_REG);
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_ENCODING_REG);
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_POLARITY_REG);
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_HSIZE_REG);
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_VSIZE_REG);
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_HSYNC_REG);
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_F0_VBLANK_H_REG);
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_F0_VSYNC_V_REG);
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_F0_VSYNC_H_REG);
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_ACTIVE_SIZE_F1_REG);
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_FRAME_SYNC_REG);
-    // RegValue = HVTC_GetReg(VTC_ADDR, VTC_GEN_GLOBAL_DELAY_REG);
+    // RegValue = HVTC_GetReg(VTC_STATUS_REG);
+    // RegValue = HVTC_GetReg(VTC_ERROR_REG);
+    // RegValue = HVTC_GetReg(VTC_IRQ_ENABLE_REG);
+    // RegValue = HVTC_GetReg(VTC_GEN_ACTIVE_SIZE_F0_REG);
+    // RegValue = HVTC_GetReg(VTC_GEN_TIMING_STATUS_REG);
+    // RegValue = HVTC_GetReg(VTC_GEN_ENCODING_REG);
+    // RegValue = HVTC_GetReg(VTC_GEN_POLARITY_REG);
+    // RegValue = HVTC_GetReg(VTC_GEN_HSIZE_REG);
+    // RegValue = HVTC_GetReg(VTC_GEN_VSIZE_REG);
+    // RegValue = HVTC_GetReg(VTC_GEN_HSYNC_REG);
+    // RegValue = HVTC_GetReg(VTC_GEN_F0_VBLANK_H_REG);
+    // RegValue = HVTC_GetReg(VTC_GEN_F0_VSYNC_V_REG);
+    // RegValue = HVTC_GetReg(VTC_GEN_F0_VSYNC_H_REG);
+    // RegValue = HVTC_GetReg(VTC_GEN_ACTIVE_SIZE_F1_REG);
+    // RegValue = HVTC_GetReg(VTC_GEN_FRAME_SYNC_REG);
+    // RegValue = HVTC_GetReg(VTC_GEN_GLOBAL_DELAY_REG);
+
+    HVTC_GetTimingSettings(TimeCtrlInstPtr);
     
     return XST_SUCCESS;
 }
 
-int HVTC_EnableController(bool Enable)
+int HVTC_EnableController(TimingController *TimeCtrlInstPtr, bool Enable)
 {
-    u32 RegValue = HVTC_GetReg(VTC_ADDR, VTC_CTRL_REG);
+    if(NULL == TimeCtrlInstPtr) {
+        return XST_FAILURE;
+    }
+    
+    u32 RegValue = HVTC_GetReg(VTC_CTRL_REG);
     u32 MaskValue = VTC_CTRL_REG_GEN_ENABLE_MASK | VTC_CTRL_REG_SW_ENABLE_MASK;
     
     if(Enable){
@@ -82,18 +93,46 @@ int HVTC_EnableController(bool Enable)
         RegValue = RegValue & (~MaskValue);
     }
 
-    HVTC_SetReg(VTC_ADDR, VTC_CTRL_REG, RegValue);
+    HVTC_SetReg(VTC_CTRL_REG, RegValue);
     return XST_SUCCESS;
 }
 
-
-static void HVTC_SetReg(u32 BaseAddress, u32 Offset, u32 Value)
+int HVTC_UpdateRegisters(TimingController *TimeCtrlInstPtr)
 {
-    Xil_Out32(BaseAddress + Offset, Value);
+    if(NULL == TimeCtrlInstPtr) {
+        return XST_FAILURE;
+    }
+
+    u32 RegValue = HVTC_GetReg(VTC_CTRL_REG);
+    u32 MaskValue = VTC_CTRL_REG_UPDATE_MASK;
+    RegValue = RegValue | MaskValue;
+    
+    HVTC_SetReg(VTC_CTRL_REG, RegValue);
+    
+    return XST_SUCCESS;
+}
+
+int HVTC_GetTimingSettings(TimingController *TimeCtrlInstPtr)
+{
+    if(NULL == TimeCtrlInstPtr) {
+        return XST_FAILURE;
+    }
+
+    u32 RegValue = HVTC_GetReg(VTC_GEN_ACTIVE_SIZE_F0_REG);
+    
+    TimeCtrlInstPtr->ActiveHsize = (u16)RegValue;
+    TimeCtrlInstPtr->ActiveVsize = (u16)(RegValue >> 16);
+    
+    return XST_SUCCESS;
+}
+
+static void HVTC_SetReg(u32 Offset, u32 Value)
+{
+    Xil_Out32(VTC_BASE_ADDR + Offset, Value);
     return;
 }
 
-static u32 HVTC_GetReg(u32 BaseAddress, u32 Offset)
+static u32 HVTC_GetReg(u32 Offset)
 {
-    return Xil_In32(BaseAddress + Offset);
+    return Xil_In32(VTC_BASE_ADDR + Offset);
 }

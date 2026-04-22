@@ -29,7 +29,7 @@
 #define VTC_GEN_FRAME_SYNC_REG      (0x100)
 #define VTC_GEN_GLOBAL_DELAY_REG    (0x140)
 
-#define VTC_CTRL_REG_DEFAULT            (0x07F7EF20)    // 0000_0111_1111_0111_1110_1111_0010_0000
+#define VTC_CTRL_REG_DEFAULT            (0x07F7EF00)    // 0000_0111_1111_0111_1110_1111_0000_0000
 #define VTC_CTRL_REG_GEN_ENABLE_MASK    (0x4)
 #define VTC_CTRL_REG_UPDATE_MASK        (0x2)
 #define VTC_CTRL_REG_SW_ENABLE_MASK     (0x1)
@@ -42,8 +42,8 @@ TimingController TimingControllerInst;
 
 
 /************************** Internal Definitions *****************************/
-static void HVTC_SetReg(u32 Offset, u32 Value);
-static u32 HVTC_GetReg(u32 Offset);
+// static void HVTC_SetReg(u32 Offset, u32 Value);
+// static u32 HVTC_GetReg(u32 Offset);
 
 
 int HVTC_Init(TimingController *TimeCtrlInstPtr)
@@ -54,24 +54,16 @@ int HVTC_Init(TimingController *TimeCtrlInstPtr)
     
     HVTC_SetReg(VTC_CTRL_REG, VTC_CTRL_REG_DEFAULT);
 
-    // u32 RegValue = 0;
-    // RegValue = HVTC_GetReg(VTC_STATUS_REG);
-    // RegValue = HVTC_GetReg(VTC_ERROR_REG);
-    // RegValue = HVTC_GetReg(VTC_IRQ_ENABLE_REG);
-    // RegValue = HVTC_GetReg(VTC_GEN_ACTIVE_SIZE_F0_REG);
-    // RegValue = HVTC_GetReg(VTC_GEN_TIMING_STATUS_REG);
-    // RegValue = HVTC_GetReg(VTC_GEN_ENCODING_REG);
-    // RegValue = HVTC_GetReg(VTC_GEN_POLARITY_REG);
-    // RegValue = HVTC_GetReg(VTC_GEN_HSIZE_REG);
-    // RegValue = HVTC_GetReg(VTC_GEN_VSIZE_REG);
-    // RegValue = HVTC_GetReg(VTC_GEN_HSYNC_REG);
-    // RegValue = HVTC_GetReg(VTC_GEN_F0_VBLANK_H_REG);
-    // RegValue = HVTC_GetReg(VTC_GEN_F0_VSYNC_V_REG);
-    // RegValue = HVTC_GetReg(VTC_GEN_F0_VSYNC_H_REG);
-    // RegValue = HVTC_GetReg(VTC_GEN_ACTIVE_SIZE_F1_REG);
-    // RegValue = HVTC_GetReg(VTC_GEN_FRAME_SYNC_REG);
-    // RegValue = HVTC_GetReg(VTC_GEN_GLOBAL_DELAY_REG);
+    // TEMPORARY SETTINGS
+    // HVTC_SetReg(VTC_GEN_ACTIVE_SIZE_F0_REG, (u32)((50 << 16) | 50));
+    // HVTC_SetReg(VTC_GEN_HSIZE_REG,          (u32)64);
+    // HVTC_SetReg(VTC_GEN_VSIZE_REG,          (u32)64);
+    // HVTC_SetReg(VTC_GEN_HSYNC_REG,          (u32)((60 << 16) | 55));
+    // HVTC_SetReg(VTC_GEN_F0_VBLANK_H_REG,    (u32)((63 << 16) | 50));    // When is horizontal blanking during vertical blanking lines
+    // HVTC_SetReg(VTC_GEN_F0_VSYNC_V_REG,     (u32)((60 << 16) | 55));    // Which lines assert VSYNC
+    // HVTC_SetReg(VTC_GEN_F0_VSYNC_H_REG,     (u32)((63 << 16) | 0));    // Which pixel in VSYNC lines assert VSYNC
 
+    HVTC_UpdateRegisters(TimeCtrlInstPtr);
     HVTC_GetTimingSettings(TimeCtrlInstPtr);
     
     return XST_SUCCESS;
@@ -126,13 +118,13 @@ int HVTC_GetTimingSettings(TimingController *TimeCtrlInstPtr)
     return XST_SUCCESS;
 }
 
-static void HVTC_SetReg(u32 Offset, u32 Value)
+void HVTC_SetReg(u32 Offset, u32 Value)
 {
     Xil_Out32(VTC_BASE_ADDR + Offset, Value);
     return;
 }
 
-static u32 HVTC_GetReg(u32 Offset)
+u32 HVTC_GetReg(u32 Offset)
 {
     return Xil_In32(VTC_BASE_ADDR + Offset);
 }

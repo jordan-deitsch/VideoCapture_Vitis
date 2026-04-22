@@ -31,4 +31,8 @@ int HVTC_EnableController(TimingController *TimeCtrlInstPtr, bool Enable);
 int HVTC_GetTimingSettings(TimingController *TimeCtrlInstPtr);
 int HVTC_UpdateRegisters(TimingController *TimeCtrlInstPtr);
 
+// TEMP
+void HVTC_SetReg(u32 Offset, u32 Value);
+u32 HVTC_GetReg(u32 Offset);
+
 #endif

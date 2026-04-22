@@ -42,7 +42,27 @@ int main()
 	
 	xil_printf("Finished initializing\r\n");
 
+	/*
+	 * VTC Testing
+	 */
+	
+	// HVTC_EnableController(&TimingControllerInst, true);
+	// HVTPG_ConfigureFrame(&PatternGenInst, e_HorizontalRamp);
+	// HVTPG_GenerateFrame(&PatternGenInst);
+
+	// u32 RegOffset = 0x0;
+	// u32 SetValue = 0x0;
+	// u32 GetValue = 0x0;
+	
+	// while(1)
+	// {
+	// 	GetValue = HVTC_GetReg(RegOffset);
+	// 	HVTC_SetReg(RegOffset, SetValue);
+	// }
+
 	bool GenVideo = false;
+	int UpdateTime = 5;
+	int BackgroundPattern = e_SolidRed;
 	
 	while(1)
 	{
@@ -52,9 +72,9 @@ int main()
 
 			if(HdmiInst.DisplayPresent)
 			{
-				HVTC_UpdateRegisters(&TimingControllerInst);
 				HVTC_EnableController(&TimingControllerInst, true);
-				HVTPG_ConfigureFrame(&PatternGenInst, e_HorizontalRamp);
+				HVTPG_ConfigureFrame(&PatternGenInst, BackgroundPattern);
+				HVTPG_GenerateContinuous(&PatternGenInst);
 				GenVideo = true;
 			}
 			else
@@ -66,8 +86,9 @@ int main()
 
 		if(GenVideo)
 		{
-			HVTPG_GenerateFrame(&PatternGenInst);
-		}
+			HVTPG_MovingTarget(&PatternGenInst, BackgroundPattern);
+			msleep(UpdateTime);
+		}	
 	}
     
   return 0;

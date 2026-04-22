@@ -50,7 +50,7 @@ extern PatternGenerator PatternGenInst;
 /************************** Function Declarations *****************************/
 int HVTPG_Init(PatternGenerator *PattGenInstPtr);
 int HVTPG_ConfigureFrame(PatternGenerator *PattGenInstPtr, int Pattern);
-int HVTPG_GenerateFrame(PatternGenerator *PattGenInstPtr);
-
+int HVTPG_GenerateContinuous(PatternGenerator *PattGenInstPtr);
+int HVTPG_MovingTarget(PatternGenerator *PattGenInstPtr, int Pattern);
 
 #endif

@@ -458,7 +458,7 @@ static int HHDMI_ConfigureDevice(ADV7511Device *HdmiInstPtr)
 	}
 
     HHDMI_SetReg(HdmiInstPtr, 0x15, 0x01);  // Input video format: 16-bit YCbCr 4:2:2, separate syncs
-    HHDMI_SetReg(HdmiInstPtr, 0x16, 0xBC);  // Output format: 8'b1011_1100: 4:2:2, 8-bit, style 3, no DDR
+    HHDMI_SetReg(HdmiInstPtr, 0x16, 0x3C);  // Output format: 8'b0011_1100: 4:4:4, 8-bit, style 3, no DDR
     HHDMI_SetReg(HdmiInstPtr, 0x17, 0x00);  // Sync Polarity: VSync and Hsync both high polarity
     HHDMI_SetReg(HdmiInstPtr, 0x48, 0x08);  // Input justification: 8'b0000_1000: right justified 
     HHDMI_SetReg(HdmiInstPtr, 0xBA, 0x60);  // Clock Delay: 8'b0110_0000: no delay

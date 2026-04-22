@@ -14,6 +14,7 @@
 #include "HIIC.h"
 #include "HINTC.h"
 #include "sleep.h"
+#include "xil_types.h"
 #include <stdbool.h>
 
 

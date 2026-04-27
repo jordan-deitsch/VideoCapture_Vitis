@@ -463,6 +463,10 @@ static int HHDMI_ConfigureDevice(ADV7511Device *HdmiInstPtr)
     HHDMI_SetReg(HdmiInstPtr, 0x48, 0x08);  // Input justification: 8'b0000_1000: right justified 
     HHDMI_SetReg(HdmiInstPtr, 0xBA, 0x60);  // Clock Delay: 8'b0110_0000: no delay
     HHDMI_SetReg(HdmiInstPtr, 0xD0, 0x30);  // Sync Pulse: default settings, no DDR, input ID = 1
+
+    // Set AVI Packet info
+    HHDMI_SetReg(HdmiInstPtr, 0x55, 0x52);  // AVI InfoFrame: 8'b0101_0010;
+    
     return XST_SUCCESS;
 }
 

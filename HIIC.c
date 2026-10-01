@@ -11,6 +11,7 @@
 
 /************************** Device Instance Definitions *****************************/
 IicBus	IicBusInstHdmi;
+IicBus	IicBusInstMain;
 
 XIic    XIicList[MAX_IIC_PERIPHERALS];
 IicBus 	*IicBusList[NUM_IIC_DRIVERS];
@@ -55,7 +56,13 @@ int HIIC_Setup() {
 		return XST_FAILURE;
 	}
 
+	Status = HIIC_Init(&IicBusInstMain, IIC_MAIN_DEVICE_ADDR, IIC_MAIN_INTR_ID, IIC_MAIN_PERIPHERALS);
+	if (Status != XST_SUCCESS) {
+		return XST_FAILURE;
+	}
+
 	IicBusList[0] = &IicBusInstHdmi;
+	IicBusList[1] = &IicBusInstMain;
 
 	return XST_SUCCESS;
 }

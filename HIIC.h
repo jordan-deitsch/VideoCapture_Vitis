@@ -14,8 +14,8 @@
 #include "xintc.h"
 
 
-#define NUM_IIC_DRIVERS			(1)
-#define MAX_IIC_PERIPHERALS 	(1)
+#define NUM_IIC_DRIVERS			(2)
+#define MAX_IIC_PERIPHERALS 	(3)
 #define IIC_TIMEOUT_PER_BYTE	(5000)
 #define IIC_DEFAULT_STATUS_REG	(0x00C0)
 #define IIC_MAX_TIMEOUT			(3)
@@ -26,11 +26,14 @@
 
 // Device IDs for AXI-IIC devices
 #define IIC_HDMI_DEVICE_ADDR	(XPAR_H_MICROBLAZE_AXI_IIC_HDMI_BASEADDR)
+#define IIC_MAIN_DEVICE_ADDR	(XPAR_H_MICROBLAZE_AXI_IIC_MAIN_BASEADDR)
 
 // Interrupt IDs for AXI-IIC devices
 #define IIC_HDMI_INTR_ID 		(XPAR_FABRIC_H_MICROBLAZE_AXI_IIC_HDMI_INTR)
+#define IIC_MAIN_INTR_ID 		(XPAR_FABRIC_H_MICROBLAZE_AXI_IIC_MAIN_INTR)
 
 #define IIC_HDMI_PERIPHERALS	(1)
+#define IIC_MAIN_PERIPHERALS	(3)
 
 
 #define IIC_REG_TSUSTA 	(0x128)
@@ -66,6 +69,7 @@ typedef struct IicBus
 
 
 extern	IicBus	IicBusInstHdmi;
+extern	IicBus	IicBusInstMain;
 extern	IicBus	*IicBusList[];
 
 

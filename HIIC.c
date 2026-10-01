@@ -147,9 +147,6 @@ int HIIC_WriteData(IicBus *IicBusPtr,
 	// Set address of IIC slave
 	XIic_SetAddress(IicBusPtr->IicInstPtr, XII_ADDR_TO_SEND_TYPE, IicSlaveAddr);
 
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_MESSAGE, Iic_Write_Start);
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_DEVICE, (u32)IicSlaveAddr);
-
 	// Start the IIC device.
 	Status = XIic_Start(IicBusPtr->IicInstPtr);
 	if (Status != XST_SUCCESS) {
@@ -157,8 +154,6 @@ int HIIC_WriteData(IicBus *IicBusPtr,
 		//MPCI_WriteReg(IIC_MONITOR_BASE_ADDR, IIC_MONITOR_CTRL_REG_OFFSET, 0x0);
 		return Status;
 	}
-
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_MESSAGE, Iic_Write_MasterSend);
 
 	IicBusPtr->IicInstPtr->Options = 0x0;
 
@@ -169,8 +164,6 @@ int HIIC_WriteData(IicBus *IicBusPtr,
 		//MPCI_WriteReg(IIC_MONITOR_BASE_ADDR, IIC_MONITOR_CTRL_REG_OFFSET, 0x0);
 		return Status;
 	}
-
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_MESSAGE, Iic_Write_Transmit);
 
 	// Wait till data is transmitted.
 	while ((IicTransmitComplete == 0) || (XIic_IsIicBusy(IicBusPtr->IicInstPtr) == TRUE)) {
@@ -193,12 +186,7 @@ int HIIC_WriteData(IicBus *IicBusPtr,
 	// Write finished successfully, reset timeout number and stop the IIC device.
 	IicTimeoutNumber = 0;
 	
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_MESSAGE, Iic_Write_Stop);
-
 	XIic_Stop(IicBusPtr->IicInstPtr);
-
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_MESSAGE, 0);
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_DEVICE, 0);
 
 	// Disable timeout counter at end of IIC transaction
 	//MPCI_WriteReg(IIC_MONITOR_BASE_ADDR, IIC_MONITOR_CTRL_REG_OFFSET, 0x0);
@@ -236,11 +224,7 @@ int HIIC_ReadData(IicBus *IicBusPtr,
 
 	// Set address of IIC slave
 	XIic_SetAddress(IicBusPtr->IicInstPtr, XII_ADDR_TO_SEND_TYPE, IicSlaveAddr);
-
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_MESSAGE, Iic_Read_Start);
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_DEVICE, (u32)IicSlaveAddr);
 	
-
 	// Start the IIC device.
 	Status = XIic_Start(IicBusPtr->IicInstPtr);
 	if (Status != XST_SUCCESS) {
@@ -248,8 +232,6 @@ int HIIC_ReadData(IicBus *IicBusPtr,
 		//MPCI_WriteReg(IIC_MONITOR_BASE_ADDR, IIC_MONITOR_CTRL_REG_OFFSET, 0x0);
 		return XST_FAILURE;
 	}
-
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_MESSAGE, Iic_Read_MasterSend);
 
 	// Set the Repeated Start option, needed for read operations
 	IicBusPtr->IicInstPtr->Options = XII_REPEATED_START_OPTION;
@@ -260,8 +242,6 @@ int HIIC_ReadData(IicBus *IicBusPtr,
 		//MPCI_WriteReg(IIC_MONITOR_BASE_ADDR, IIC_MONITOR_CTRL_REG_OFFSET, 0x0);
 		return Status;
 	}
-
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_MESSAGE, Iic_Read_Transmit);
 
 	// Wait till all the data is transmitted.
 	while (IicTransmitComplete == 0) {
@@ -281,8 +261,6 @@ int HIIC_ReadData(IicBus *IicBusPtr,
 		}
 	}
 
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_MESSAGE, Iic_Read_MasterRecv);
-
 	IicBusPtr->IicInstPtr->Options = 0x0;
 	// Receive the Data.
 	Status = XIic_MasterRecv(IicBusPtr->IicInstPtr, RxMsgPtr, ByteCount);
@@ -291,8 +269,6 @@ int HIIC_ReadData(IicBus *IicBusPtr,
 		//MPCI_WriteReg(IIC_MONITOR_BASE_ADDR, IIC_MONITOR_CTRL_REG_OFFSET, 0x0);
 		return Status;
 	}
-
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_MESSAGE, Iic_Read_Receive);
 
 	// Wait till all the data is received, reset timeout counter.
 	IicTimeoutCounter = 0;
@@ -316,12 +292,7 @@ int HIIC_ReadData(IicBus *IicBusPtr,
 	// Read finished successfully, reset timeout number and stop the IIC device.
 	IicTimeoutNumber = 0;
 
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_MESSAGE, Iic_Read_Stop);
-
 	XIic_Stop(IicBusPtr->IicInstPtr);
-
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_MESSAGE, 0);
-	//MPCI_WriteReg(FPGA_IDAQ_TEST_BASE, FPGA_IDAQ_IIC_TEST_DEVICE, 0);
 
 	// Disable timeout counter at end of IIC transaction
 	//MPCI_WriteReg(IIC_MONITOR_BASE_ADDR, IIC_MONITOR_CTRL_REG_OFFSET, 0x0);

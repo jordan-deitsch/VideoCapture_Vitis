@@ -119,5 +119,4 @@ int HHDMI_ConnectionEvent(ADV7511Device *HdmiInstPtr);
 void HDMI_IntrHandler(void *CallBackRef);
 
 
-
 #endif

@@ -3,6 +3,8 @@
 #include "HIIC.h"
 #include "HVTC.h"
 #include "HVTPG.h"
+#include "HSI570.h"
+#include "HTCA9548.h"
 #include "xil_printf.h"
 #include <stdbool.h>
 

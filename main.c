@@ -33,6 +33,11 @@ int main()
 		return Status;
 	}
 
+	Status = HSI570_Init(&SI570Inst, &IicBusInstMain, SI570_DEVICE_ADDR);
+	if (Status != XST_SUCCESS) {
+		return Status;
+	}
+
 	Status = HVTC_Init(&TimingControllerInst);
 	if (Status != XST_SUCCESS) {
 		return Status;

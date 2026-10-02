@@ -7,8 +7,9 @@
  */
 
 #include "HTCA9548.h"
-#include "xil_printf.h"
+#include <sleep.h>
 #include <xstatus.h>
+
 
 /************************** Device Instance Definitions *****************************/
 TCA9548Device TCA9548Inst;
@@ -30,7 +31,14 @@ int HTCA9548_Init(TCA9548Device *TCA9548InstPtr, IicBus *I2cBusPtr, u8 Address)
     TCA9548InstPtr->IicBusPtr = I2cBusPtr;
     TCA9548InstPtr->Address = Address;  
 
-    Status = HTCA9548_SwitchSel(TCA9548InstPtr, e_Switch_NC_1);
+    Status = HTCA9548_SwitchSel(TCA9548InstPtr, e_Switch_DEFAULT);
+    if(Status != XST_SUCCESS){
+        TCA9548InstPtr->IicPresent = false;
+        return Status;
+    }
+    else {
+        TCA9548InstPtr->IicPresent = true;
+    }
 
     return Status;
 }
@@ -42,9 +50,21 @@ int HTCA9548_SwitchSel(TCA9548Device *TCA9548InstPtr, TCA9548SwitchPosition Swit
 		return XST_FAILURE;
 	}
 
+    int Status = XST_SUCCESS;
+
     TCA9548InstPtr->SwitchPosition = SwitchPos;
-    u8 RegValue = 1 << SwitchPos;
-    return HTCA9548_SetReg(TCA9548InstPtr, RegValue);
+    u8 RegValue = 0;
+    if(SwitchPos < e_Switch_DEFAULT) {
+        RegValue = 0x1 << SwitchPos;
+    }
+    
+    Status = HTCA9548_SetReg(TCA9548InstPtr, RegValue);
+    if(Status != XST_SUCCESS){
+        return Status;
+    }
+
+    usleep(TCA9548_SWITCH_DELAY_USEC);  // Allow delay for switch activation
+    return Status;
 }
 
 

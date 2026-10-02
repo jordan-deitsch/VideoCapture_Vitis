@@ -21,7 +21,6 @@
 #define IIC_MAX_TIMEOUT			(3)
 #define IIC_TIMEOUT_ERROR		(2)		// IIC timeout error code
 #define IIC_AXI_CLOCK_PERIOD	(8)		// period of AXI clock in nsec
-#define IIC_TIMEOUT_ERROR		(2)		// IIC timeout error code
 #define IIC_THDDAT_DEFAULT_NSEC	(1500)	// default Data Hold Time in nsec
 
 // Device IDs for AXI-IIC devices

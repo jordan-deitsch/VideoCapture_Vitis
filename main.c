@@ -3,10 +3,11 @@
 #include "HIIC.h"
 #include "HVTC.h"
 #include "HVTPG.h"
-#include "HSI570.h"
 #include "HTCA9548.h"
+#include "HSI570.h"
 #include "xil_printf.h"
 #include <stdbool.h>
+#include <stdint.h>
 
 int main()
 {
@@ -23,6 +24,11 @@ int main()
 	}
 
 	Status = HINTC_SetupPeripheralInterrupt(&IntrCtrInst, IicBusList, NUM_IIC_DRIVERS);
+	if (Status != XST_SUCCESS) {
+		return Status;
+	}
+
+	Status = HTCA9548_Init(&TCA9548Inst, &IicBusInstMain, TCA9548_DEVICE_ADDR);
 	if (Status != XST_SUCCESS) {
 		return Status;
 	}
@@ -44,27 +50,9 @@ int main()
 	
 	xil_printf("Finished initializing\r\n");
 
-	/*
-	 * VTC Testing
-	 */
-	
-	// HVTC_EnableController(&TimingControllerInst, true);
-	// HVTPG_ConfigureFrame(&PatternGenInst, e_HorizontalRamp);
-	// HVTPG_GenerateFrame(&PatternGenInst);
-
-	// u32 RegOffset = 0x0;
-	// u32 SetValue = 0x0;
-	// u32 GetValue = 0x0;
-	
-	// while(1)
-	// {
-	// 	GetValue = HVTC_GetReg(RegOffset);
-	// 	HVTC_SetReg(RegOffset, SetValue);
-	// }
-
 	bool GenVideo = false;
 	int UpdateTime = 5;
-	int BackgroundPattern = e_SolidRed;
+	int BackgroundPattern = e_ColorBars;
 	
 	while(1)
 	{

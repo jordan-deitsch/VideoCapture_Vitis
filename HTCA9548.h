@@ -18,15 +18,27 @@
 
 
 /************************** Constant Definitions *****************************/
-#define TCA9548_DEVICE_ADDR       (0xE8)  // 0xE8 = 8'b1110_1000
+#define TCA9548_DEVICE_ADDR       (0x74)  // 0x74 = 7'b111_0100 [1, 1, 1, 0, A2, A1, A0]
 #define TCA9548_THDDAT_TIME_NSEC  (500)
+
+typedef enum
+{
+    e_Switch_EEPROM,
+    e_Switch_NC_1,
+    e_Switch_NC_2,
+    e_Switch_SI570,
+    e_Switch_SI5328,
+    e_Switch_PMBUS,
+    e_Switch_NC_6,
+    e_Switch_NC_7
+}TCA9548SwitchPosition;
 
 typedef struct TCA9548Device
 {
 	IicBus *IicBusPtr; 	// Pointer to I2C bus
 	u8 Address; 		// Device address
     bool IicPresent;
-    u8 SwitchPosition;
+    TCA9548SwitchPosition SwitchPosition;
 } TCA9548Device;
 
 
@@ -35,7 +47,7 @@ extern TCA9548Device TCA9548Inst;
 
 /************************** Function Declarations *****************************/
 int HTCA9548_Init(TCA9548Device *TCA9548InstPtr, IicBus *I2cBusPtr, u8 Address);
-int HTCA9548_SwitchSel(TCA9548Device *TCA9548InstPtr, u8 SwitchSel);
+int HTCA9548_SwitchSel(TCA9548Device *TCA9548InstPtr, TCA9548SwitchPosition SwitchPos);
 
 
 #endif

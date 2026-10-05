@@ -5,6 +5,7 @@
 #include "HVTPG.h"
 #include "HTCA9548.h"
 #include "HSI570.h"
+#include "HSFP.h"
 #include "xil_printf.h"
 #include <stdbool.h>
 #include <stdint.h>
@@ -33,7 +34,12 @@ int main()
 		return Status;
 	}
 
-	Status = HSI570_Init(&SI570Inst, &IicBusInstMain, SI570_DEVICE_ADDR);
+	Status = HSI570_Init(&SI570Inst, &IicBusInstMain, SI570_DEVICE_ADDR, &TCA9548Inst_Clocks, e_Switch_CLK_SI570);
+	if (Status != XST_SUCCESS) {
+		return Status;
+	}
+
+	Status = HSFP_Init(&SFPInst, &IicBusInstMain, &TCA9548Inst_SFP, e_Switch_SFP_SFP0);
 	if (Status != XST_SUCCESS) {
 		return Status;
 	}

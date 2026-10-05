@@ -26,11 +26,11 @@
 #define SI570_NUM_CONFIG_REGS   (6)
 
 // SI570 Registers
-#define SI570_DIVIDERS_REG              (0x07)
-    #define SI570_DIVIDERS_HSDIV_MASK  (0xE0)
-    #define SI570_DIVIDERS_N1_6_2_MASK  (0x1F)
-    #define SI570_DIVIDERS_HSDIV_OFFSET  (5)
-    #define SI570_DIVIDERS_N1_6_2_OFFSET  (2)
+#define SI570_DIVIDERS_REG                  (0x07)
+    #define SI570_DIVIDERS_HSDIV_MASK       (0xE0)
+    #define SI570_DIVIDERS_N1_6_2_MASK      (0x1F)
+    #define SI570_DIVIDERS_HSDIV_OFFSET     (5)
+    #define SI570_DIVIDERS_N1_6_2_OFFSET    (2)
 
 #define SI570_RFREQ_37_32_REG           (0x08)
     #define SI570_DIVIDERS_N1_1_0_MASK  (0xC0)
@@ -62,12 +62,14 @@ typedef struct SI570FreqSettings
     u8 N1;
     u64 RFREQ;
 }SI570FreqSettings;
+
 typedef struct SI570Device
 {
 	IicBus *IicBusPtr; 	// Pointer to I2C bus
 	u8 Address; 		// Device address
     bool IicPresent;
-    TCA9548SwitchPosition SwitchPos;
+    TCA9548Device *SwitchPtr;
+    int SwitchPos;
     SI570FreqSettings *CurrentSettings;
     float FreqXTAL;
 } SI570Device;
@@ -84,7 +86,7 @@ typedef enum
 extern SI570Device SI570Inst;
 
 /************************** Function Declarations *****************************/
-int HSI570_Init(SI570Device *SI570InstPtr, IicBus *I2cBusPtr, u8 Address);
+int HSI570_Init(SI570Device *SI570InstPtr, IicBus *I2cBusPtr, u8 Address, TCA9548Device *SwitchPtr, int SwitchPos);
 int HSI570_SetFrequency(SI570Device *SI570InstPtr, SI570PresetFrequencies FreqSel);
 
 

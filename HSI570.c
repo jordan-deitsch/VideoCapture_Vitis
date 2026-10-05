@@ -51,7 +51,7 @@ SI570FreqSettings *SI570FreqPtrArr[] = {&SI570Freq_297_MHz, &SI570Freq_296p7_MHz
 u8 HSDIV_Lookup[] = {4, 5, 6, 7, 0, 9, 0, 11};	// Values corresponding to the [2:0] HSDIV register slice
 
 // Initialize Programmable Clock Source
-int HSI570_Init(SI570Device *SI570InstPtr, IicBus *I2cBusPtr, u8 Address)
+int HSI570_Init(SI570Device *SI570InstPtr, IicBus *I2cBusPtr, u8 Address, TCA9548Device *SwitchPtr, int SwitchPos)
 {
 	if((SI570InstPtr == NULL) || (I2cBusPtr == NULL)){
         return XST_FAILURE;
@@ -61,11 +61,12 @@ int HSI570_Init(SI570Device *SI570InstPtr, IicBus *I2cBusPtr, u8 Address)
 
 	SI570InstPtr->IicBusPtr = I2cBusPtr;
 	SI570InstPtr->Address = Address;
-	SI570InstPtr->SwitchPos = e_Switch_SI570;
+	SI570InstPtr->SwitchPtr = SwitchPtr;
+	SI570InstPtr->SwitchPos = SwitchPos;
 	SI570InstPtr->CurrentSettings = &SI570Freq_POR;
 
 	// Set switch to allow communication with endpoint device
-	Status = HTCA9548_SwitchSel(&TCA9548Inst_Clocks, SI570InstPtr->SwitchPos);
+	Status = HTCA9548_SwitchSel(SI570InstPtr->SwitchPtr, SI570InstPtr->SwitchPos);
 	if(Status != XST_SUCCESS){
 		return Status;
 	}
@@ -124,7 +125,7 @@ int HSI570_SetFrequency(SI570Device *SI570InstPtr, SI570PresetFrequencies FreqSe
 	int Status = XST_SUCCESS;
 
 	// Set switch to allow communication with endpoint device
-	Status = HTCA9548_SwitchSel(&TCA9548Inst_Clocks, SI570InstPtr->SwitchPos);
+	Status = HTCA9548_SwitchSel(SI570InstPtr->SwitchPtr, SI570InstPtr->SwitchPos);
 	if(Status != XST_SUCCESS){
 		return Status;
 	}

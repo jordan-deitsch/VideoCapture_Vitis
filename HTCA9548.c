@@ -51,7 +51,7 @@ int HTCA9548_Init(TCA9548Device *TCA9548InstPtr, IicBus *I2cBusPtr, u8 Address)
     TCA9548InstPtr->IicBusPtr = I2cBusPtr;
     TCA9548InstPtr->Address = Address;  
 
-    Status = HTCA9548_SwitchSel(TCA9548InstPtr, e_Switch_DEFAULT);
+    Status = HTCA9548_SwitchSel(TCA9548InstPtr, TXA9548_MAX_OUTPUTS);
     if(Status != XST_SUCCESS){
         TCA9548InstPtr->IicPresent = false;
         return Status;
@@ -64,9 +64,9 @@ int HTCA9548_Init(TCA9548Device *TCA9548InstPtr, IicBus *I2cBusPtr, u8 Address)
 }
 
 
-int HTCA9548_SwitchSel(TCA9548Device *TCA9548InstPtr, TCA9548SwitchPosition SwitchPos)
+int HTCA9548_SwitchSel(TCA9548Device *TCA9548InstPtr, int SwitchPos)
 {
-    if(NULL == TCA9548InstPtr){
+    if((NULL == TCA9548InstPtr) | (SwitchPos < 0)){
 		return XST_FAILURE;
 	}
 
@@ -76,7 +76,7 @@ int HTCA9548_SwitchSel(TCA9548Device *TCA9548InstPtr, TCA9548SwitchPosition Swit
 
     // Default to switch OFF (all 0) if invalid switch position is entered
     u8 RegValue = 0;
-    if(SwitchPos < e_Switch_DEFAULT) {
+    if(SwitchPos < TXA9548_MAX_OUTPUTS) {
         RegValue = 0x1 << SwitchPos;
     }
     

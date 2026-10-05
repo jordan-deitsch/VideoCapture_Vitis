@@ -15,7 +15,7 @@
 #include <stdbool.h>
 
 
-#define VTPG_BASE_ADDR (XPAR_V_HDMI_TPG_BASEADDR)
+#define VTPG_BASE_ADDR (XPAR_H_HDMI_V_HDMI_TPG_BASEADDR)
 
 enum PatternId{
     e_VideoPassThrough,

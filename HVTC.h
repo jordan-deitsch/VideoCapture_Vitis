@@ -14,7 +14,7 @@
 #include <stdbool.h>
 
 
-#define VTC_BASE_ADDR (XPAR_V_TC_0_BASEADDR)
+#define VTC_BASE_ADDR (XPAR_H_HDMI_V_TC_0_BASEADDR)
 
 typedef struct TimingController
 {

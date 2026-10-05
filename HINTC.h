@@ -17,7 +17,7 @@
 #include "HIIC.h"
 
 
-#define INTC_DEVICE_ADDR	(XPAR_MICROBLAZE_0_AXI_INTC_BASEADDR)
+#define INTC_DEVICE_ADDR	(XPAR_H_MICROBLAZE_MICROBLAZE_0_AXI_INTC_BASEADDR)
 
 extern XIntc IntrCtrInst;
 extern u32 StubInterruptCounter;

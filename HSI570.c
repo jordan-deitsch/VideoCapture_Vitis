@@ -8,6 +8,7 @@
 
 #include "HSI570.h"
 #include "HIIC.h"
+#include "HTCA9548.h"
 #include <xstatus.h>
 
 #define POR_OUTPUT_FREQ (156250000.0f)	// Power-on Reset output frequency = 156.25 MHz
@@ -64,7 +65,7 @@ int HSI570_Init(SI570Device *SI570InstPtr, IicBus *I2cBusPtr, u8 Address)
 	SI570InstPtr->CurrentSettings = &SI570Freq_POR;
 
 	// Set switch to allow communication with endpoint device
-	Status = HTCA9548_SwitchSel(&TCA9548Inst, SI570InstPtr->SwitchPos);
+	Status = HTCA9548_SwitchSel(&TCA9548Inst_Clocks, SI570InstPtr->SwitchPos);
 	if(Status != XST_SUCCESS){
 		return Status;
 	}
@@ -123,7 +124,7 @@ int HSI570_SetFrequency(SI570Device *SI570InstPtr, SI570PresetFrequencies FreqSe
 	int Status = XST_SUCCESS;
 
 	// Set switch to allow communication with endpoint device
-	Status = HTCA9548_SwitchSel(&TCA9548Inst, SI570InstPtr->SwitchPos);
+	Status = HTCA9548_SwitchSel(&TCA9548Inst_Clocks, SI570InstPtr->SwitchPos);
 	if(Status != XST_SUCCESS){
 		return Status;
 	}

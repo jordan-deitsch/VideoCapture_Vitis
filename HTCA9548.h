@@ -20,9 +20,10 @@
 
 
 /************************** Constant Definitions *****************************/
-#define TCA9548_DEVICE_ADDR       (0x74)  // 0x74 = 7'b111_0100 [1, 1, 1, 0, A2, A1, A0]
-#define TCA9548_THDDAT_TIME_NSEC  (500)
-#define TCA9548_SWITCH_DELAY_USEC (100)
+#define TCA9548_CLOCKS_DEVICE_ADDR  (0x74)  // 0x74 = 7'b111_0100 [1, 1, 1, 0, A2, A1, A0]
+#define TCA9548_SFP_DEVICE_ADDR     (0x75)  // 0x75 = 7'b111_0101 [1, 1, 1, 0, A2, A1, A0]
+#define TCA9548_THDDAT_TIME_NSEC    (500)
+#define TCA9548_SWITCH_DELAY_USEC   (100)
 
 typedef enum
 {
@@ -47,10 +48,11 @@ typedef struct TCA9548Device
 
 
 /************************** Peripheral Device Declarations *****************************/
-extern TCA9548Device TCA9548Inst;
+extern TCA9548Device TCA9548Inst_Clocks;
+extern TCA9548Device TCA9548Inst_SFP;
 
 /************************** Function Declarations *****************************/
-int HTCA9548_Init(TCA9548Device *TCA9548InstPtr, IicBus *I2cBusPtr, u8 Address);
+int HTCA9548_Setup();
 int HTCA9548_SwitchSel(TCA9548Device *TCA9548InstPtr, TCA9548SwitchPosition SwitchPos);
 
 

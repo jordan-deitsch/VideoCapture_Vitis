@@ -12,12 +12,32 @@
 
 
 /************************** Device Instance Definitions *****************************/
-TCA9548Device TCA9548Inst;
+TCA9548Device TCA9548Inst_Clocks;
+TCA9548Device TCA9548Inst_SFP;
 
 /************************** Internal Definitions *****************************/
+static int HTCA9548_Init(TCA9548Device *TCA9548InstPtr, IicBus *I2cBusPtr, u8 Address);
 static int HTCA9548_GetReg(TCA9548Device *TCA9548InstPtr, u8 *ValuePtr);
 static int HTCA9548_SetReg(TCA9548Device *TCA9548InstPtr, u8 RegValue);
 
+
+// Setup all I2C switches
+int HTCA9548_Setup()
+{
+    int Status = XST_SUCCESS;
+
+    Status = HTCA9548_Init(&TCA9548Inst_Clocks, &IicBusInstMain, TCA9548_CLOCKS_DEVICE_ADDR);
+    if(Status != XST_SUCCESS){
+        return Status;
+    }
+
+    Status = HTCA9548_Init(&TCA9548Inst_SFP, &IicBusInstMain, TCA9548_SFP_DEVICE_ADDR);
+    if(Status != XST_SUCCESS){
+        return Status;
+    }
+
+    return Status;
+}
 
 // Initialize I2C Switch
 int HTCA9548_Init(TCA9548Device *TCA9548InstPtr, IicBus *I2cBusPtr, u8 Address)
@@ -53,6 +73,8 @@ int HTCA9548_SwitchSel(TCA9548Device *TCA9548InstPtr, TCA9548SwitchPosition Swit
     int Status = XST_SUCCESS;
 
     TCA9548InstPtr->SwitchPosition = SwitchPos;
+
+    // Default to switch OFF (all 0) if invalid switch position is entered
     u8 RegValue = 0;
     if(SwitchPos < e_Switch_DEFAULT) {
         RegValue = 0x1 << SwitchPos;

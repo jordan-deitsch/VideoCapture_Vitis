@@ -28,7 +28,7 @@ int main()
 		return Status;
 	}
 
-	Status = HTCA9548_Init(&TCA9548Inst, &IicBusInstMain, TCA9548_DEVICE_ADDR);
+	Status = HTCA9548_Setup();
 	if (Status != XST_SUCCESS) {
 		return Status;
 	}

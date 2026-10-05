@@ -26,7 +26,7 @@ enum PatternId{
     e_SolidGreen,
     e_SolidBlue,
     e_SolidBlack,
-    e_SolidWhile,
+    e_SolidWhite,
     e_ColorBars,
     e_ZonePlate,
     e_TartanColorBars,
